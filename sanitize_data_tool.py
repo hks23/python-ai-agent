@@ -1,0 +1,22 @@
+from .agent_base import AgentBase
+
+class SanitizeDataTool(AgentBase):
+    def __init__(self, name="SanitizeDataTool", max_retries=3, verbose=True):
+        super().__init__(name, max_retries, verbose)
+    
+    def execute(self, medical_data):
+        messages = [    
+            {
+                "role": "system", 
+                "content": "You are an AI assistant that sanitizes the given medical data by removing the Patient Health Information (PHI)"
+            },
+            {
+                "role": "user", 
+                "content": (
+                    "Remove all PHI from the following data:\n"
+                    f"{medical_data}\n\n\Sanitized data:"
+                )
+            }
+        ]
+        sanitized_data = self.call_openai(messages, max_tokens=150)
+        return sanitized_data
